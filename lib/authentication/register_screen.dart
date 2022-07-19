@@ -28,7 +28,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: Column(
             children: [
               Container(
@@ -72,9 +73,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                     /// NOMOR HANDPHONE
                     Container(
-                      margin: const EdgeInsets.only(top: 10, left: 16, right: 16),
-                      padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 1),
+                      margin:
+                          const EdgeInsets.only(top: 10, left: 16, right: 16),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 1),
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(30),
@@ -99,9 +101,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                     /// KOLOM NAMA
                     Container(
-                      margin: const EdgeInsets.only(top: 10, left: 16, right: 16),
-                      padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 1),
+                      margin:
+                          const EdgeInsets.only(top: 10, left: 16, right: 16),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 1),
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(30),
@@ -136,9 +139,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                     /// KOLOM EMAIL
                     Container(
-                      margin: const EdgeInsets.only(top: 10, left: 16, right: 16),
-                      padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 1),
+                      margin:
+                          const EdgeInsets.only(top: 10, left: 16, right: 16),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 1),
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(30),
@@ -165,9 +169,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                     /// KOLOM PASSWORD
                     Container(
-                      margin: const EdgeInsets.only(top: 10, left: 16, right: 16),
-                      padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 1),
+                      margin:
+                          const EdgeInsets.only(top: 10, left: 16, right: 16),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 1),
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(30),
@@ -216,56 +221,60 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     SizedBox(
                       width: 250,
                       height: 50,
-                      child: RaisedButton(
-                          color: Colors.blue,
-                          child: const Text(
-                            'Registrasi',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(29)),
-                          onPressed: () async {
-                            /// CEK APAKAH EMAIL DAN PASSWORD SUDAH TERISI DENGAN FORMAT YANG BENAR
-                            if (_formKey.currentState!.validate()) {
+                      child: InkWell(
+                        onTap: () async {
+                          /// CEK APAKAH EMAIL DAN PASSWORD SUDAH TERISI DENGAN FORMAT YANG BENAR
+                          if (_formKey.currentState!.validate()) {
+                            setState(() {
+                              _visible = true;
+                            });
+
+                            bool shouldNavigate = await _registerHandler();
+
+                            if (shouldNavigate) {
+                              await _registeringUserToDatabase();
+
                               setState(() {
-                                _visible = true;
+                                _visible = false;
+                                _nameController.text = "";
+                                _phoneController.text = "";
+                                _emailController.text = "";
+                                _passwordController.text = "";
                               });
 
-                              bool shouldNavigate = await _registerHandler();
-
-                              if (shouldNavigate) {
-                                await _registeringUserToDatabase();
-
-                                setState(() {
-                                  _visible = false;
-                                  _nameController.text = "";
-                                  _phoneController.text = "";
-                                  _emailController.text = "";
-                                  _passwordController.text = "";
-                                });
-
-                                _showSuccessRegistration();
-                              } else {
-                                setState(() {
-                                  _visible = false;
-                                });
-                                _showFailureRegistration();
-                              }
+                              _showSuccessRegistration();
+                            } else {
+                              setState(() {
+                                _visible = false;
+                              });
+                              _showFailureRegistration();
                             }
-                          }),
+                          }
+                        },
+                        child: Container(
+                          child: Center(
+                            child: const Text(
+                              'Registrasi',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(29),
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 30,
                     ),
-                    FlatButton(
-                      onPressed: () {
-                        Route route = MaterialPageRoute(
-                            builder: (context) => const LoginScreen());
-                        Navigator.pushReplacement(context, route);
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context).pop();
                       },
                       splashColor: Colors.grey[200],
                       child: const Text(
@@ -366,10 +375,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(
                 height: 16,
               ),
-              FlatButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+              InkWell(
+                onTap: () => Navigator.of(context).pop(),
                 child: Container(
                   width: 250,
                   height: 50,
@@ -428,5 +435,3 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 }
-
-

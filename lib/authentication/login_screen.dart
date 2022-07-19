@@ -184,10 +184,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 30,
                   ),
-                  FlatButton(
-                    onPressed: () {
+                  InkWell(
+                    onTap: () {
                       Route route = MaterialPageRoute(
                           builder: (context) => const RegisterScreen());
                       Navigator.push(context, route);

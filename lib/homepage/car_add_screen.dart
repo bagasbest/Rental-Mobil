@@ -9,7 +9,6 @@ import '../authentication/login_screen.dart';
 import '../database/database_service.dart';
 
 class CarAddScreen extends StatefulWidget {
-
   @override
   State<CarAddScreen> createState() => _CarAddScreenState();
 }
@@ -264,60 +263,65 @@ class _CarAddScreenState extends State<CarAddScreen> {
               ),
 
               /// TOMBOL LOGIN
-              SizedBox(
-                width: 200,
-                height: 50,
-                child: RaisedButton(
-                  color: Colors.blue,
-                  child: const Text(
-                    'Kirim',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
+              InkWell(
+                onTap: () async {
+                  /// CEK APAKAH KOLOM KOLOM SUDAH TERISI SEMUA
+                  if (_formKey.currentState!.validate()) {
+                    setState(() {
+                      _visible = true;
+                    });
+
+                    String? url = (_image != null)
+                        ? await DatabaseService.uploadImageReport(_image!)
+                        : null;
+
+                    DatabaseService.uploadCar(
+                      _carTitle.text,
+                      _carAddress.text,
+                      _carPrice.text,
+                      _carYear.text,
+                      _carDescription.text,
+                      (url != null) ? url : '',
+                      dropdownValue,
+                    );
+
+                    setState(() {
+                      _visible = false;
+                      _carTitle.text = "";
+                      _carDescription.text = "";
+                      _carYear.text = "";
+                      _carPrice.text = "";
+                      _carAddress.text = "";
+                      _image = null;
+                      isImageAdd = false;
+                    });
+
+                    setState(() {
+                      _visible = false;
+                    });
+                  } else if (_image == null) {
+                    toast('Mohon tambahkan gambar mobil.');
+                  }
+                },
+                child: SizedBox(
+                  width: 200,
+                  height: 50,
+                  child: Container(
+                    child: Center(
+                      child: const Text(
+                        'Kirim',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(29),
+                      color: Colors.blue,
                     ),
                   ),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(29)),
-                  onPressed: () async {
-                    /// CEK APAKAH KOLOM KOLOM SUDAH TERISI SEMUA
-                    if (_formKey.currentState!.validate()) {
-                      setState(() {
-                        _visible = true;
-                      });
-
-                      String? url = (_image != null)
-                          ? await DatabaseService.uploadImageReport(_image!)
-                          : null;
-
-                      DatabaseService.uploadCar(
-                        _carTitle.text,
-                        _carAddress.text,
-                        _carPrice.text,
-                        _carYear.text,
-                        _carDescription.text,
-                        (url != null) ? url : '',
-                        dropdownValue,
-                      );
-
-                      setState(() {
-                        _visible = false;
-                        _carTitle.text = "";
-                        _carDescription.text = "";
-                        _carYear.text = "";
-                        _carPrice.text = "";
-                        _carAddress.text = "";
-                        _image = null;
-                        isImageAdd = false;
-                      });
-
-                      setState(() {
-                        _visible = false;
-                      });
-                    } else if (_image == null) {
-                      toast('Mohon tambahkan gambar mobil.');
-                    }
-                  },
                 ),
               ),
             ],
