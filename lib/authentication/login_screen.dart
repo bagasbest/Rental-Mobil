@@ -18,7 +18,6 @@ class _LoginScreenState extends State<LoginScreen> {
     final _emailController = TextEditingController();
     final _passwordController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
-    bool _showPassword = false;
     bool _visible = false;
 
     return Scaffold(
@@ -134,49 +133,55 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(
                     width: 200,
                     height: 50,
-                    child: RaisedButton(
-                        color: Colors.blue,
-                        child: const Text(
-                          'Login',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(29)),
-                        onPressed: () async {
-                          /// CEK APAKAH EMAIL DAN PASSWORD SUDAH TERISI DENGAN FORMAT YANG BENAR
-                          if (_formKey.currentState!.validate()) {
+                    child: InkWell(
+                      onTap: () async {
+                        /// CEK APAKAH EMAIL DAN PASSWORD SUDAH TERISI DENGAN FORMAT YANG BENAR
+                        if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            _visible = true;
+                          });
+
+                          /// CEK APAKAH Email DAN PASSWORD SUDAH TERDAFTAR / BELUM
+                          bool shouldNavigate = await _signInHandler(
+                            _emailController.text,
+                            _passwordController.text,
+                          );
+
+                          if (shouldNavigate) {
                             setState(() {
-                              _visible = true;
+                              _visible = false;
                             });
 
-                            /// CEK APAKAH Email DAN PASSWORD SUDAH TERDAFTAR / BELUM
-                            bool shouldNavigate = await _signInHandler(
-                              _emailController.text,
-                              _passwordController.text,
-                            );
+                            /// MASUK KE HOMEPAGE JIKA SUKSES LOGIN
+                            Route route = MaterialPageRoute(
+                                builder: (context) =>
+                                const HomeScreen());
+                            Navigator.pushReplacement(context, route);
 
-                            if (shouldNavigate) {
-                              setState(() {
-                                _visible = false;
-                              });
-
-                              /// MASUK KE HOMEPAGE JIKA SUKSES LOGIN
-                              Route route = MaterialPageRoute(
-                                  builder: (context) =>
-                                  const HomeScreen());
-                              Navigator.pushReplacement(context, route);
-
-                            } else {
-                              setState(() {
-                                _visible = false;
-                              });
-                            }
+                          } else {
+                            setState(() {
+                              _visible = false;
+                            });
                           }
-                        }),
+                        }
+                      },
+                      child: Container(
+                          child: Center(
+                            child: const Text(
+                              'Login',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(29),
+                              color: Colors.blue,
+                            ),
+                         ),
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
