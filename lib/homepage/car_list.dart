@@ -95,7 +95,7 @@ class DataCarList extends StatelessWidget {
                               height: 10,
                             ),
                             Text(
-                              "${formatCurrency.format(int.parse(price))}",
+                              "${formatCurrency.format(int.parse(price))} / hari",
                               style: TextStyle(
                                 color: Colors.red,
                                 fontWeight: FontWeight.bold,

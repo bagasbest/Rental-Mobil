@@ -141,22 +141,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Colors.purple[100],
                 borderRadius: BorderRadius.circular(16)),
           ),
-          (isAdmin)
-              ? Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: FloatingActionButton(
-                      child: Icon(Icons.add),
-                      onPressed: () {
-                        Route route = MaterialPageRoute(
-                            builder: (context) => CarAddScreen());
-                        Navigator.push(context, route);
-                      },
-                    ),
-                  ),
-                )
-              : Container(),
           Container(
             width: MediaQuery.of(context).size.width,
             margin: EdgeInsets.only(
@@ -214,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
               borderRadius: BorderRadius.circular(16),
               child: Image.network(
                 'https://images.unsplash.com/photo-1565043666747-69f6646db940?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80',
-                fit: BoxFit.cover,
+                fit: BoxFit.fill,
                 height: 150,
                 width: MediaQuery.of(context).size.width,
               ),
@@ -317,6 +301,22 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
           ),
+          (isAdmin)
+              ? Align(
+            alignment: Alignment.bottomLeft,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: FloatingActionButton(
+                child: Icon(Icons.add),
+                onPressed: () {
+                  Route route = MaterialPageRoute(
+                      builder: (context) => CarAddScreen());
+                  Navigator.push(context, route);
+                },
+              ),
+            ),
+          )
+              : Container(),
         ],
       ),
     );

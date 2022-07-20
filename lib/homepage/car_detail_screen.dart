@@ -80,7 +80,7 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
                     ),
                     child: Image.network(
                       widget.image,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fill,
                       height: 300,
                       width: MediaQuery.of(context).size.width,
                     ),
@@ -131,7 +131,7 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
                   ),
                 ),
                 Text(
-                  "Harga : ${formatCurrency.format(int.parse(widget.price))}",
+                  "Harga : ${formatCurrency.format(int.parse(widget.price))} / hari",
                   style: TextStyle(
                     fontSize: 15,
                     color: Colors.red,
